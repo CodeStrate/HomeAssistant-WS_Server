@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.* # if you use multiple (e.g. .env.dev, .env.production)
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor folders
+.vscode/
+.idea/
+*.sw?
+
+# Coverage and test output
+coverage/
+*.lcov
+
+# Misc
+.cache/
+.next/        # if using Next.js anywhere
+turbo/        # if using Turborepo
+*.tgz         # packed files
+*.local       # custom local files
+
+*.js
+*.js.map
