@@ -49,14 +49,9 @@ const httpServer = http.createServer((req, res) => {
    ───────────────────────────────────────────────────────── */
 const wss = new WebSocketServer({ server: httpServer });
 
-wss.on("connection", (ws: WebSocket, req) => {
-  const token = new URL(req.url || "", `http://${req.headers.host}`).searchParams.get("token");
-  if(token != process.env.HA_TOKEN){
-    logger.error("[WS] Unauthorized Client, Please check your Auth Token");
-    ws.close();
-  }else{
-    logger.info("[WS] Authorized client connected");
-  }
+wss.on("connection", (ws: WebSocket) => {
+ 
+    logger.info("[WS] Client connected");
 
   ws.on("message", (msg) => {
     // Optional: echo or log incoming client messages
