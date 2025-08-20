@@ -17,21 +17,24 @@ const httpServer = http.createServer((req, res) => {
 
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
-      try {
-        const { message } = JSON.parse(body);
-        if (!message) throw new Error("Missing message field");
+    try {
+    const payload = JSON.parse(body);
+    
+    // Use the message field if it exists, otherwise use the whole payload
+    const message = payload.message || payload;
+    if (!message) throw new Error("Missing message field");
 
-        // Broadcast to all WS clients
-        wss.clients.forEach((c) => {
-          if (c.readyState === WebSocket.OPEN) {
-            c.send(JSON.stringify({
-              sender: "HomeAssistant",
-              message,
-              timestamp: new Date().toISOString(),
-              type: "message"
-            }));
-          }
-        });
+    // Broadcast to all WS clients - use the original payload format from HA
+    wss.clients.forEach((c) => {
+      if (c.readyState === WebSocket.OPEN) {
+        c.send(JSON.stringify({
+          sender: payload.sender || "HomeAssistant",
+          message: message,
+          timestamp: payload.timestamp || new Date().toISOString(),
+          type: payload.type || "message"
+        }));
+      }
+    });
 
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ status: "ok", broadcast: message }));
