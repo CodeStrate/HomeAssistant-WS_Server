@@ -24,7 +24,12 @@ const httpServer = http.createServer((req, res) => {
         // Broadcast to all WS clients
         wss.clients.forEach((c) => {
           if (c.readyState === WebSocket.OPEN) {
-            c.send(JSON.stringify({ type: "broadcast", message }));
+            c.send(JSON.stringify({
+              sender: "HomeAssistant",
+              message,
+              timestamp: new Date().toISOString(),
+              type: "message"
+            }));
           }
         });
 
