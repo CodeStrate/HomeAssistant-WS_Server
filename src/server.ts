@@ -40,8 +40,10 @@ const httpServer = http.createServer((req, res) => {
         res.end(JSON.stringify({ status: "ok", broadcast: message }));
         logger.info(`[HTTP] Broadcasted → ${message}`);
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        logger.error(`[HTTP] JSON parse error: ${errorMessage}, body: ${body}`);
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: (err as Error).message }));
+        res.end(JSON.stringify({ error: errorMessage }));
       }
     });
     return;
